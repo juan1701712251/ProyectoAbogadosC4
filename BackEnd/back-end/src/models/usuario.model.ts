@@ -53,7 +53,7 @@ export class Usuario extends Entity {
   rol: string;
 
   @hasMany(() => Caso, {keyTo: 'abogadoId'})
-  casosAbogado: Caso[];
+  casos: Caso[];
 
   @hasMany(() => Caso, {keyTo: 'clienteId'})
   casosCliente: Caso[];
