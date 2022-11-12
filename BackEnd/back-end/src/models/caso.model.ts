@@ -1,4 +1,6 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, belongsTo} from '@loopback/repository';
+import {FaseCaso} from './fase-caso.model';
+import {Usuario} from './usuario.model';
 
 @model()
 export class Caso extends Entity {
@@ -33,6 +35,14 @@ export class Caso extends Entity {
   })
   direccionJuzgadoAsignado: string;
 
+  @belongsTo(() => FaseCaso)
+  faseCasoId: string;
+
+  @belongsTo(() => Usuario)
+  abogadoId: string;
+
+  @belongsTo(() => Usuario)
+  clienteId: string;
 
   constructor(data?: Partial<Caso>) {
     super(data);
