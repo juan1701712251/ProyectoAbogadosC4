@@ -1,3 +1,5 @@
+import { authenticate } from '@loopback/authentication';
+import { service } from '@loopback/core';
 import {
   Count,
   CountSchema,
@@ -16,15 +18,47 @@ import {
   del,
   requestBody,
   response,
+  HttpErrors,
 } from '@loopback/rest';
-import {Usuario} from '../models';
+import {Credenciales, Usuario} from '../models';
 import {UsuarioRepository} from '../repositories';
-
+import { AutenticacionService } from '../services';
+const fetch = require("node-fetch")
 export class UsuarioController {
   constructor(
     @repository(UsuarioRepository)
     public usuarioRepository : UsuarioRepository,
+    @service(AutenticacionService)
+    public autenticacionService : AutenticacionService
   ) {}
+
+  @post('/identificarUsuario',
+  {
+    responses:{
+      '200':{ description: 'Identificación correcta'}
+    }
+  })
+  async identificarUsuario(
+    @requestBody() credenciales : Credenciales
+  )
+  {
+    let u = await this.autenticacionService.IdentificarUsuario(credenciales.usuario,credenciales.contrasena)
+    if(u)
+    {
+      let token = this.autenticacionService.GenerarTokenJWT(u);
+      return {
+        datos : {
+          nombre : u.nombre + " " + u.apellido,
+          correo : u.correo,
+          id : u.id,
+          rol : u.rol
+        },
+        tk : token
+      }
+    }else{
+      throw new HttpErrors.Unauthorized("Credenciales incorrectas")
+    }
+  }
 
   @post('/usuarios')
   @response(200, {
@@ -44,7 +78,27 @@ export class UsuarioController {
     })
     usuario: Omit<Usuario, 'id'>,
   ): Promise<Usuario> {
-    return this.usuarioRepository.create(usuario);
+    
+    //Generar la clave
+    let clave = this.autenticacionService.GenerarClave();
+    //Encriptarla
+    let claveCifrada = this.autenticacionService.CifrarClave(clave)
+    // Asignar la clave al nuevo usuario
+    usuario.contrasena = claveCifrada
+    // Guardar el usuario en base de datos
+    let u = await this.usuarioRepository.create(usuario);
+    // Preparar correo para el usuario
+    let contenido = "ABOGADOS APP. Se te ha creado una cuenta en el sistema " 
+    + usuario.nombre + ". Tu clave es: " + clave;
+    let asunto = "Se creó exitosamente tu cuenta";
+    let destino = usuario.correo;
+    // Enviar correo
+    fetch("http://127.0.0.1:5000/correo?cuerpo_correo="+contenido+"&correo_destino="+destino+"&asunto_correo="+asunto)
+    .then((data : any) => {
+      console.log(data);
+    });
+    // Retornamos el usuario creado
+    return u;
   }
 
   @get('/usuarios/count')
@@ -57,7 +111,8 @@ export class UsuarioController {
   ): Promise<Count> {
     return this.usuarioRepository.count(where);
   }
-
+  
+  @authenticate('abogado')
   @get('/usuarios')
   @response(200, {
     description: 'Array of Usuario model instances',

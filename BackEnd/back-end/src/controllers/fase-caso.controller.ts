@@ -1,3 +1,4 @@
+import { authenticate } from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -20,6 +21,7 @@ import {
 import {FaseCaso} from '../models';
 import {FaseCasoRepository} from '../repositories';
 
+@authenticate('abogado')
 export class FaseCasoController {
   constructor(
     @repository(FaseCasoRepository)

@@ -1,3 +1,4 @@
+import { authenticate } from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -26,6 +27,8 @@ export class CasoController {
     public casoRepository : CasoRepository,
   ) {}
 
+
+  @authenticate('abogado')
   @post('/casos')
   @response(200, {
     description: 'Caso model instance',
@@ -58,6 +61,7 @@ export class CasoController {
     return this.casoRepository.count(where);
   }
 
+  @authenticate('abogado','cliente')
   @get('/casos')
   @response(200, {
     description: 'Array of Caso model instances',
