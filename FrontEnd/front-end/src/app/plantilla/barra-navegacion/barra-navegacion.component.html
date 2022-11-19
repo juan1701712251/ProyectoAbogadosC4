@@ -1,0 +1,36 @@
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems, options);
+  });
+
+  // Or with jQuery
+
+  $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+
+</script>
+
+<nav class="nav-principal">
+  <div class="nav-wrapper">
+    <img src="/assets/images/icon.png" class="imagen-icono">
+    <a href="#" class="brand-logo">Abogados APP</a>
+    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <ul class="right hide-on-med-and-down">
+      <li><a routerLink="/administracion/buscar-usuario">Usuarios</a></li>
+      <li><a routerLink="/administracion/buscar-caso">Casos</a></li>
+      <li><a routerLink="/seguridad/identificacion">Iniciar Sesión</a></li>
+      <li><a routerLink="/administracion/crear-usuario">Registrarse</a></li>
+    </ul>
+  </div>
+</nav>
+
+<ul class="sidenav" id="mobile-demo">
+  <li><a href="sass.html">Sass</a></li>
+  <li><a href="badges.html">Components</a></li>
+  <li><a href="collapsible.html">Javascript</a></li>
+  <li><a href="mobile.html">Mobile</a></li>
+</ul>
+
