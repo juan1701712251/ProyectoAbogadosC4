@@ -1,1 +1,39 @@
-<p>editar-usuario works!</p>
+<div class="row">
+  <h3 class="center-align">Editar Usuario</h3>
+  <article class="col s6 offset-s3">
+    <form [formGroup]="fgValidador" (ngSubmit)="ActualizarUsuario()" action="">
+      <input type="hidden" formControlName = "id">
+      <div class="input-field">
+        <input formControlName="nombre" type="text" name="nombre" required>
+        <label for="nombre">Nombre</label>
+      </div>
+      <div class="input-field">
+        <input formControlName="apellido" type="text" name="apellido" required>
+        <label for="apellido">Apellido</label>
+      </div>
+      <div class="input-field">
+        <input formControlName="correo" type="email" name="correo" required>
+        <label for="correo">Correo</label>
+      </div>
+      <div class="input-field">
+        <input formControlName="direccion"  type="text" name="direccion" required>
+        <label for="direccion">Direccion</label>
+      </div>
+      <div class="input-field">
+        <input formControlName="celular" type="text" name="celular" required>
+        <label for="celular">Celular</label>
+      </div>
+      <div class="col s12">
+        <select formControlName="rol" style="display: block;">
+          <option value="cliente">Cliente</option>
+          <option value="abogado">Abogado</option>
+        </select>
+      </div>
+      <br>
+      <br>
+      <p class="center-align">
+        <button [disabled]="fgValidador.invalid" class="btn btn-primary" type="submit">Actualizar</button>
+      </p>
+    </form>
+  </article>
+</div>

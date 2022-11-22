@@ -14,6 +14,7 @@ import { BuscarFaseCasoComponent } from './fase-casos/buscar-fase-caso/buscar-fa
 import { CrearFaseCasoComponent } from './fase-casos/crear-fase-caso/crear-fase-caso.component';
 import { EditarFaseCasoComponent } from './fase-casos/editar-fase-caso/editar-fase-caso.component';
 import { EliminarFaseCasoComponent } from './fase-casos/eliminar-fase-caso/eliminar-fase-caso.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -33,7 +34,9 @@ import { EliminarFaseCasoComponent } from './fase-casos/eliminar-fase-caso/elimi
   ],
   imports: [
     CommonModule,
-    AdministracionRoutingModule
+    AdministracionRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class AdministracionModule { }
